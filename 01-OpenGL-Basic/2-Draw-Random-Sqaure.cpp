@@ -1,0 +1,55 @@
+#include <GL/glut.h>
+#include <stdlib.h>
+#include <time.h>
+
+static int delay = 10;     // global msec value  
+
+void init() {
+    srand(time(0));
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glColor3f(1.0, 0.0, 0.0);
+    gluOrtho2D(0.0, 50.0, 0.0, 50.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void display() {
+    int x1, y1, x2, y2, r, g, b;
+
+    x1 = rand() % 50;
+    y1 = rand() % 50;
+    x2 = rand() % 50;
+    y2 = rand() % 50;
+    r = rand() % 256;
+    g = rand() % 256;
+    b = rand() % 256;
+
+    glColor3f((GLfloat)r / 255, (GLfloat)g / 255, (GLfloat)b / 255);
+
+    glBegin(GL_POLYGON);
+    glVertex2f(x1, y1);
+    glVertex2f(x1, y2);
+    glVertex2f(x2, y2);
+    glVertex2f(x2, y1);
+    glEnd();
+
+    glFlush();
+}
+
+// Timer callback func
+void timer(int t) {
+    glutPostRedisplay();        // flag to event queue
+    glutTimerFunc(delay, timer, t);     // recursive
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, (char**)argv);     
+    glutInitWindowSize(500, 500);   
+    glutCreateWindow("1-1. Draw Random Square");
+    glutDisplayFunc(display);
+    glutTimerFunc(delay, timer, 0);     // Regist Timer Callback func
+
+    init();
+    glutMainLoop();
+
+    return 0;
+}
